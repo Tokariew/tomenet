@@ -4,7 +4,7 @@ Get Dockerfile and init.sh from this repo, put into the same directory.
 Run this command to create podman image
 
 ```
-podman build --tag tomenet-server-builder -f Dockerfile
+podman build --tag tomenet-server-builder -f Dockerfile --build-arg CACHEBUST=$(date +%s)
 ```
 
 Compile the server with

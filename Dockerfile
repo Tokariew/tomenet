@@ -4,3 +4,5 @@ COPY init.sh /init.sh
 VOLUME /srv/build
 RUN mkdir -p /srv/build
 ENTRYPOINT /./init.sh -DFOREGROUND
+ARG CACHEBUST
+RUN dnf -y update && dnf clean all
