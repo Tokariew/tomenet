@@ -1,6 +1,6 @@
 ## Cross-Compling server using podman
 
-Get Dockerfile and init.sh from this repo, put into the same directory.
+Get Dockerfile, init.sh and fedora.patch from this repo, put into the same directory.
 Run this command to create podman image
 
 ```
@@ -15,6 +15,7 @@ podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build" localhost/tomene
 
 You should change **PATH-WHERE-TO-SAVE-BUILD-SERVER** with proper path, in mine case it is **/home/tokariew/tomenet**
 
-Server is build on fedora 32 – Fedora 33 have currently some problems with linking libraries.
+Server is build on fedora 34, it will create archive with all files which are
+needed to run server.
 
 Server will be based on latest commit in official repo
