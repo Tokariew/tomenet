@@ -1,0 +1,25 @@
+diff --git a/src/makefile.mingw b/src/makefile.mingw
+index 88ced41bb..0b18f4709 100644
+--- a/src/makefile.mingw
++++ b/src/makefile.mingw
+@@ -185,10 +185,10 @@ LUALIBS = -lkernel32 -luser32 -lwsock32 -lgdi32 -lcomdlg32 -lwinmm
+ #LIBS += -lSDL -lSDL_mixer `$(SDL_CONFIG) --libs`
+ ##
+ ## With SDL, without using 'sdl-config', entered SDL's include/lib folders manually above:
+-CFLAGS += -DSOUND_SDL $(SDL_INCLUDE_PATH)
++#CFLAGS += -DSOUND_SDL $(SDL_INCLUDE_PATH)
+ #LIBS += -lSDL -lSDL_mixer $(SDL_LIB_PATH)
+ #added regexp capability for guide searching via mingw-libgnurx -> link against regex
+-LIBS += $(SDL_LIB_PATH) -lSDL_mixer -lregex
++#LIBS += $(SDL_LIB_PATH) -lSDL_mixer -lregex
+
+ # Security hardening
+ # -pie seems to be broken
+@@ -197,6 +197,7 @@ LIBS += $(SDL_LIB_PATH) -lSDL_mixer -lregex
+ # Code may not compile with -D_FORTIFY_SOURCE=2
+ #CFLAGS += -D_FORTIFY_SOURCE=2
+ #LUACFLAGS += -D_FORTIFY_SOURCE=2
++LDFLAGS += -lssp
+
+ # Added the according preprocessor for 'preproc' - C. Blue
+ # If your system doesnt have a dedicated cpp command, you might
