@@ -13,12 +13,14 @@ podman build --tag tomenet-server-builder -f Dockerfile --build-arg CACHEBUST=$(
 Compile the server with
 
 ```
-podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build" localhost/tomenet-server-builder
+podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tomenet-server-builder
 ```
 
 You should change **PATH-WHERE-TO-SAVE-BUILD-SERVER** with proper path, in mine case it is **/home/tokariew/tomenet**
 
 Folder must exist before running above command, relative path should be proceed with dot or dots
+
+Instead of podman, docker can be used… but it require root privileges.
 
 Server is build on fedora 34, it will create archive with all files which are
 needed to run server.
