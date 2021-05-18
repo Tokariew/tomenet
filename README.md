@@ -36,7 +36,7 @@ To apply patch add name of file at the end of command example command earlier
 like so:
 
 ```
-podman·run·--rm·-v·"out:/srv/build:z"·localhost/tomenet-server-builder iddcmove.patch 
+podman run --rm -v "out:/srv/build:z" localhost/tomenet-server-builder iddcmove.patch 
 ```
 
 You can generate your own patch file with git diff like so, if you didn't make
