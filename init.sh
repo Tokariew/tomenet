@@ -1,13 +1,34 @@
+#!/bin/sh
+
+cleanup(){ \
+        cd /srv/build
+        rm -rf tomenet
+}
+
+patch(){ \
+        for p in "$@"
+        do
+                cp /patches/"$p" /srv/build/tomenet/src
+		echo patching with "$p"
+                git apply "$p" || return 1
+		echo patching passed
+        done
+}
+
+echo "$@"
+
 cd /srv/build
 git clone https://github.com/TomenetGame/tomenet.git tomenet
-cp /fedora.patch /srv/build/tomenet/src/
+
 cd tomenet/src
-git apply fedora.patch
-make -j 12 -f makefile.mingw tomenet.server.exe
+patch "$@" || (cleanup && exit 0)
+patch fedora.patch || cleanup
+
+cpus="$(nproc)"
+make -s -j"$cpus" -f makefile.mingw tomenet.server.exe
 mingw-strip tomenet.server.exe
 mv tomenet.server.exe ..
-cd ..
+cd /srv/build/tomenet
 cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libssp-0.dll .
-7z a -t7z -mx=9 ../tomenet-$(date --iso-8601).7z COPYING .tomenetrc lib/ tomenet.server.exe libssp-0.dll
-cd ..
-rm -rf tomenet
+7z a -t7z -mx=9 ../tomenet-"$(date --iso-8601)".7z COPYING .tomenetrc lib/ tomenet.server.exe libssp-0.dll
+cleanup

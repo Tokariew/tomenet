@@ -3,8 +3,8 @@ RUN microdnf -y install gcc make wine.i686 mingw32-gcc git p7zip-plugins --nodoc
 COPY init.sh /init.sh
 VOLUME /srv/build
 RUN mkdir -p /srv/build
-COPY fedora.patch /fedora.patch
-ENTRYPOINT ./init.sh -DFOREGROUND
+COPY patches /patches
+ENTRYPOINT ["/init.sh"]
 ARG CACHEBUST
 RUN microdnf -y update && microdnf clean all
 
