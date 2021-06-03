@@ -1,28 +1,35 @@
 #!/bin/sh
+# shellcheck disable=SC2164
 
 cleanup(){ \
-        cd /srv/build
-        rm -rf tomenet
+  cd /srv/build
+  rm -rf tomenet
 }
 
 patch(){ \
-        for p in "$@"
-        do
-                cp /patches/"$p" /srv/build/tomenet/src
-		echo patching with "$p"
-                git apply "$p" || return 1
-		echo patching passed
-        done
+  for p in "$@"
+  do
+       cp /patches/"$p" /srv/build/tomenet/src
+       echo patching with "$p"
+       git apply "$p" || return 1
+       echo patching passed
+   done
 }
-
-echo "$@"
 
 cd /srv/build
 git clone https://github.com/TomenetGame/tomenet.git tomenet
 
 cd tomenet/src
+
+var1=$(git log -1 --pretty=format:'%cr')
+num1=${var1%% *}
+
+{ [ "$num1" -lt 7 ] && test "${var1#*days}" != "$var1"; } || { cleanup && echo "Old version" && exit 0; }
+
 patch "$@" || (cleanup && exit 0)
-patch fedora.patch || cleanup
+patch fedora.patch || (cleanup && exit 0)
+
+echo "compiling"
 
 cpus="$(nproc)"
 make -s -j"$cpus" -f makefile.mingw tomenet.server.exe
