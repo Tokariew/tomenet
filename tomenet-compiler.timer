@@ -1,0 +1,9 @@
+[Unit]
+Description=Cross-compile tomenet-server weekly
+
+[Timer]
+OnCalendar=Mon *-*-* 12:15:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
