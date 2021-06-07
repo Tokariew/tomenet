@@ -2,6 +2,7 @@
 
 mount /media/dav/
 podman start -a tomenet
+[ ! -e "/media/btrfs/containers/tomenet/tomenet-$(date --iso-8601).7z" ] && exit 0
 mv /media/btrfs/containers/tomenet/tomenet-$(date --iso-8601).7z /media/dav/tomenet/weekly-snapshots
 cd /media/dav/tomenet/weekly-snapshots/
 sha256sum tomenet-$(date --iso-8601).7z > tomenet-$(date --iso-8601).7z.sha256sum
