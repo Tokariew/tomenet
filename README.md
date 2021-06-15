@@ -36,7 +36,7 @@ To apply patch add name of file at the end of command example command earlier
 like so:
 
 ```
-podman run --rm -v "out:/srv/build:z" localhost/tomenet-server-builder iddcmove.patch 
+podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tomenet-server-builder iddcmove.patch 
 ```
 
 You can generate your own patch file with git diff like so, if you didn't make
@@ -47,3 +47,24 @@ git diff --oneline > patchname.patch
 ```
 
 Copy generated patch file to patches folder.
+
+## Other options
+Running script with `-t` option before patch names will not compile server if
+latest commit was more than one week ago.
+
+So command below will compile server only if latest commit was less than one
+week ago:
+```
+podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tomenet-server-builder -t 
+```
+## Podman vs Docker difference
+
+* Docker require path for building an image. If you are inside directory with
+Dockerfile run:
+```
+docker build --tag tomenet-server-builder --build-arg CACHEBUST=$(date +%s) .
+```
+* When running container with docker `localhost/` before image name is not required 
+```
+docker run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" tomenet-server-builder
+```

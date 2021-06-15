@@ -16,15 +16,27 @@ patch(){ \
    done
 }
 
+timecheck(){ \
+  var1=$(git log -1 --pretty=format:'%cr')
+  num1=${var1%% *}
+  { [ "$num1" -lt 7 ] && test "${var1#*days}" != "$var1"; } || return 1
+}
+
 cd /srv/build
 git clone https://github.com/TomenetGame/tomenet.git tomenet
 
 cd tomenet/src
 
-var1=$(git log -1 --pretty=format:'%cr')
-num1=${var1%% *}
+while getopts ":t" opts
+do
+  case "$opts" in
+    (t) timecheck || { echo "old version" && cleanup && exit 0; } ;;
+  esac
+done
 
-{ [ "$num1" -lt 7 ] && test "${var1#*days}" != "$var1"; } || { cleanup && echo "Old version" && exit 0; }
+#getopts will fail silently on first patch, substraction move to correct position
+OPTIND=$((OPTIND-1))
+shift "$OPTIND"
 
 patch "$@" || (cleanup && exit 0)
 patch fedora.patch || (cleanup && exit 0)
