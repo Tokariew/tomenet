@@ -57,6 +57,12 @@ week ago:
 ```
 podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tomenet-server-builder -t 
 ```
+For compiling with custom patch the `-t` switch must be provided first
+
+```
+podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tomenet-server-builder -t casual.patch
+```
+
 ## Podman vs Docker difference
 
 * Docker require path for building an image. If you are inside directory with
