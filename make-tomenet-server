@@ -2,7 +2,7 @@
 # shellcheck disable=SC2164
 
 mount /media/dav/
-podman start -a tomenet
+podman run --rm -v "/media/btrfs/containers/tomenet/:/srv/build":z localhost/tomenet-server-builder:latest -t iddcmove.patch
 [ ! -e "/media/btrfs/containers/tomenet/tomenet-$(date --iso-8601).7z" ] && exit 0
 mv "/media/btrfs/containers/tomenet/tomenet-$(date --iso-8601).7z" /media/dav/tomenet/weekly-snapshots
 cd /media/dav/tomenet/weekly-snapshots/
