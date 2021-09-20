@@ -1,0 +1,150 @@
+diff --git a/src/common/defines-local.h b/src/common/defines-local.h
+index 8e1bbd4fe..1e9a0ba34 100644
+--- a/src/common/defines-local.h
++++ b/src/common/defines-local.h
+@@ -25,6 +25,6 @@
+ 
+ 
+ /* Permanent event "Ironman Deep Dive Challenge": */
+-#define WPOS_IRONDEEPDIVE_X	63
+-#define WPOS_IRONDEEPDIVE_Y	63
++#define WPOS_IRONDEEPDIVE_X	30
++#define WPOS_IRONDEEPDIVE_Y	34
+ #define WPOS_IRONDEEPDIVE_Z	-1
+diff --git a/src/common/defines.h b/src/common/defines.h
+index bea141f94..d2eeedc2a 100644
+--- a/src/common/defines.h
++++ b/src/common/defines.h
+@@ -1005,7 +1005,7 @@
+    Allow any form of partying, but
+    - don't allow trading items that were found before an involved party member had joined the party
+    - don't allow trading gold or items bought from shops. */
+-#define IDDC_RESTRICTED_TRADING
++//#define IDDC_RESTRICTED_TRADING
+ /* Addition for IDDC_RESTRICTED_TRADING:
+    Only allow partying when already inside the IDDC, by erasing any party membership on entering it,
+    except for the party owner.
+@@ -1228,7 +1228,7 @@
+ #define FORCE_DROPS_PROBABLE 50
+ 
+ /* minimum time required to stay on current floor in order to get an extra feeling on next floor */
+-#define TURNS_FOR_EXTRA_FEELING		(cfg.fps * 120)
++#define TURNS_FOR_EXTRA_FEELING		(cfg.fps * 30)
+ 
+ /* Enable strict probability-travel prevention by NO_MAGIC floor flag, even in up/down direction? */
+ //#define NOMAGIC_INHIBITS_LEVEL_PROBTRAVEL
+@@ -8057,7 +8057,7 @@ extern int PlayerUID;
+ 	   (get_skill(p_ptr, SKILL_DODGE)) || \
+ 	   (get_skill(p_ptr, SKILL_CRITS))) && \
+ 	 (armour_weight(p_ptr) > \
+-	 200 + get_skill_scale(p_ptr, SKILL_COMBAT, 70)))
++	 200 + get_skill_scale(p_ptr, SKILL_COMBAT, 250)))
+ 
+ /* maximum weapon weight to allow dual-wielding, 999 for no limit	[999] */
+ #define DUAL_MAX_WEIGHT 999
+diff --git a/src/server/slash.c b/src/server/slash.c
+index a31f89417..17bac54ec 100644
+--- a/src/server/slash.c
++++ b/src/server/slash.c
+@@ -3287,21 +3287,13 @@ void do_slash_cmd(int Ind, char *message, char *message_u) {
+ 			int skill = get_skill(p_ptr, SKILL_HEALTH), guis = 0;
+ 
+ 			if (gain && p_ptr->reskill_possible) {
+-				/* Take care of mimicry form in conjunction with anti-magic skill,
+-				   as Mimicry will be zero'ed from that! 'AM-Hack' */
+-				int form;
+ 
+ 				memcpy(p_ptr->s_info, p_ptr->s_info_old, MAX_SKILLS * sizeof(skill_player));
+ 				p_ptr->skill_points = p_ptr->skill_points_old;
+ 				msg_format(Ind, "\377GYou have regained %d skill points.", gain);
+-				/* AM-Hack part 1/2: If we (always) already had AM-skill before reskilling,
+-				   then it means we also already had sufficient Mimicry skill for this form,
+-				   hence we are allowed to keep it! */
+-				form = get_skill_scale(p_ptr, SKILL_ANTIMAGIC, 1000) != 0 ? p_ptr->body_monster : 0;
+ 
+ 				/* in case we changed mimicry skill */
+ 				if (p_ptr->body_monster &&
+-				    !form && /* <- AM-Hack part 2/2: Keep form if allowed. */
+ 				    r_info[p_ptr->body_monster].level > get_skill_scale(p_ptr, SKILL_MIMIC, 100))
+ 					do_mimic_change(Ind, 0, TRUE);
+ 
+diff --git a/src/server/xtra2.c b/src/server/xtra2.c
+index 4931155b3..b0cae677e 100644
+--- a/src/server/xtra2.c
++++ b/src/server/xtra2.c
+@@ -28,13 +28,13 @@
+ #ifdef ENABLE_INSTANT_RES
+ #define GHOST_XP_LOST	35
+ #else
+-#define GHOST_XP_LOST	40
++#define GHOST_XP_LOST	0
+ #endif
+ 
+ /*
+  * What % of exp points will be lost on instant resurrection?
+  */
+-#define INSTANT_RES_XP_LOST	50
++#define INSTANT_RES_XP_LOST	0
+ 
+ /*
+  * Chance of an item teleporting away when player dies, in percent. [10]
+@@ -45,7 +45,7 @@
+ 
+ /* Chance of an item from the player's inventory getting lost (aka deleted)
+    when player dies, in percent [20]. - C. Blue (limited to 4) */
+-#define DEATH_PACK_ITEM_LOST	15
++#define DEATH_PACK_ITEM_LOST	0
+ 
+ /* Chance of an item from the player's equipment getting lost (aka deleted)
+    when player dies, in percent [10]. - C. Blue (limited to 1) */
+@@ -6494,7 +6494,7 @@ bool monster_death(int Ind, int m_idx) {
+ 				bonus = 2;
+ 
+ 			/* get bonus credit in Ironman Deep Dive Challenge */
+-			if (in_iddc) {
++			if (1) {
+ #ifndef IDDC_MIMICRY_BOOST
+ 				if (!bonus) bonus = 1;
+ #else /* give a possibly greater boost than just +1 */
+@@ -9146,17 +9146,17 @@ void player_death(int Ind) {
+  #ifdef ENABLE_OCCULT /* Occult */
+ 			    || get_skill(p_ptr, SKILL_OSPIRIT) >= 50
+  #endif
+-			    ) loss_factor -= 5;
++			    ) loss_factor = 0;
+ 
+ 			reduce = p_ptr->max_exp;
+ 			reduce = reduce > 99999 ?
+ 			reduce / 100 * loss_factor : reduce * loss_factor / 100;
+-			p_ptr->max_exp -= reduce;
++			//p_ptr->max_exp -= reduce;
+ 
+ 			reduce = p_ptr->exp;
+ 			reduce = reduce > 99999 ?
+ 			reduce / 100 * loss_factor : reduce * loss_factor / 100;
+-			p_ptr->exp -= reduce;
++			//p_ptr->exp -= reduce;
+ 
+ 			/* Prevent cheezing exp to 0 to become eligible for certain events */
+ 			if (!p_ptr->max_exp && has_exp) p_ptr->exp = p_ptr->max_exp = 1;
+@@ -10236,17 +10236,17 @@ void resurrect_player(int Ind, int loss_factor) {
+ 	    || get_skill(p_ptr, SKILL_OSPIRIT) >= 50
+ #endif
+ 	    ) loss_factor -= 5;
+-	if (loss_factor < 30) loss_factor = 30;//hardcoded mess
++	if (loss_factor < 30) loss_factor = 0;//hardcoded mess
+ 
+ 	reduce = p_ptr->max_exp;
+ 	reduce = reduce > 99999 ?
+ 	    reduce / 100 * loss_factor : reduce * loss_factor / 100;
+-	p_ptr->max_exp -= reduce;
++	//p_ptr->max_exp -= reduce;
+ 
+ 	reduce = p_ptr->exp;
+ 	reduce = reduce > 99999 ?
+ 	    reduce / 100 * loss_factor : reduce * loss_factor / 100;
+-	p_ptr->exp -= reduce;
++	//p_ptr->exp -= reduce;
+ 
+ 	/* Prevent cheezing exp to 0 to become eligible for certain events */
+ 	if (!p_ptr->max_exp && has_exp) p_ptr->exp = p_ptr->max_exp = 1;
