@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # shellcheck disable=SC2164
 
 cleanup(){ \
@@ -17,9 +17,12 @@ patch(){ \
 }
 
 timecheck(){ \
-  var1=$(git log -1 --pretty=format:'%cr')
-  num1=${var1%% *}
-  { [ "$num1" -lt 7 ] && test "${var1#*days}" != "$var1"; } || return 1
+  var1=$(git log -1 --pretty=format:'%ct')
+  num1=$(date '+%s')
+  ((diff=num1-var1))
+  # old version should not be older than one week and one hour
+  # more robust
+  [ "$diff" -lt 605700 ] || return 1
 }
 
 cd /srv/build
