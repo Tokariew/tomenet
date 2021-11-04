@@ -1,14 +1,17 @@
 #!/bin/sh
 # shellcheck disable=SC2164
 
-mount /media/dav/
+#this is a script which I use to automaticaly push builds into nextcloud and mega.nz and dropbox.com
+
+mount /media/dav/ # mount nextcloud webdav
 podman run --rm -v "/media/btrfs/containers/tomenet/:/srv/build":z localhost/tomenet-server-builder:latest -t iddcmove.patch
-[ ! -e "/media/btrfs/containers/tomenet/tomenet-$(date --iso-8601).7z" ] && exit 0
+[ ! -e "/media/btrfs/containers/tomenet/tomenet-$(date --iso-8601).7z" ] && exit 0 # check if build was succesfull otherwise abort
 mv "/media/btrfs/containers/tomenet/tomenet-$(date --iso-8601).7z" /media/dav/tomenet/weekly-snapshots
 cd /media/dav/tomenet/weekly-snapshots/
 sha256sum "tomenet-$(date --iso-8601).7z" > "tomenet-$(date --iso-8601).7z.sha256sum"
-cd ~
+cd ~ # hack -- escape to known location, to safely umount later
 echo syncing
+# using rclone to sync tomenet folder into mega and drop account
 rclone sync /media/dav/tomenet/ drop:TomeNET
 rclone sync /media/dav/tomenet/ mega:TomeNET
 umount /media/dav

@@ -1,5 +1,5 @@
 [Unit]
-Description=Cross-compile tomenet-server weekly
+Description=Cross-compile tomenet-server weekly, and if machine is down during specified time, compile when online
 
 [Timer]
 OnCalendar=Mon *-*-* 12:15:00
