@@ -20,7 +20,7 @@ index bde7d00ab..8cd5eb2d2 100644
  # Code may not compile with -D_FORTIFY_SOURCE=2
  #CFLAGS += -D_FORTIFY_SOURCE=2
  #LUACFLAGS += -D_FORTIFY_SOURCE=2
-++LDFLAGS += -lssp
++LDFLAGS += -lssp
  
  # Added the according preprocessor for 'preproc' - C. Blue
  # If your system doesnt have a dedicated cpp command, you might
