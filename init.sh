@@ -52,5 +52,6 @@ mingw-strip tomenet.server.exe
 mv tomenet.server.exe ..
 cd /srv/build/tomenet
 cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libssp-0.dll .
-7z a -t7z -mx=9 ../tomenet-"$(date --iso-8601)".7z COPYING .tomenetrc lib/ tomenet.server.exe libssp-0.dll
+cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libgnurx-0.dll .
+7z a -t7z -mx=9 ../tomenet-"$(date --iso-8601)".7z COPYING .tomenetrc lib/ tomenet.server.exe libssp-0.dll libgnurx-0.dll
 cleanup

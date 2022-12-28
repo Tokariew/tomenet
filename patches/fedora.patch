@@ -13,7 +13,8 @@ index bde7d00ab..8cd5eb2d2 100644
  #LIBS += $(SDL_LIB_PATH) -lSDL_mixer -lregex
 -LIBS += $(SDL_LIB_PATH) -lSDL2_mixer -lregex
 +#LIBS += $(SDL_LIB_PATH) -lSDL2_mixer -lregex
- 
++LIBS += -lregex
+
  # Security hardening
  # -pie seems to be broken
 @@ -199,6 +199,7 @@ LIBS += $(SDL_LIB_PATH) -lSDL2_mixer -lregex
@@ -21,6 +22,6 @@ index bde7d00ab..8cd5eb2d2 100644
  #CFLAGS += -D_FORTIFY_SOURCE=2
  #LUACFLAGS += -D_FORTIFY_SOURCE=2
 +LDFLAGS += -lssp
- 
+
  # Added the according preprocessor for 'preproc' - C. Blue
  # If your system doesnt have a dedicated cpp command, you might
