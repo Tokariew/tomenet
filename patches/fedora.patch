@@ -1,8 +1,8 @@
 diff --git a/src/makefile.mingw b/src/makefile.mingw
-index bde7d00ab..8cd5eb2d2 100644
+index bbd0ce433..52f07dad4 100644
 --- a/src/makefile.mingw
 +++ b/src/makefile.mingw
-@@ -186,11 +186,11 @@ LUALIBS = -lkernel32 -luser32 -lwsock32 -lgdi32 -lcomdlg32 -lwinmm
+@@ -186,11 +186,12 @@ LUALIBS = -lkernel32 -luser32 -lwsock32 -lgdi32 -lcomdlg32 -lwinmm
  #LIBS += -lSDL -lSDL_mixer `$(SDL_CONFIG) --libs`
  ##
  ## With SDL, without using 'sdl-config', entered SDL's include/lib folders manually above:
@@ -17,7 +17,7 @@ index bde7d00ab..8cd5eb2d2 100644
 
  # Security hardening
  # -pie seems to be broken
-@@ -199,6 +199,7 @@ LIBS += $(SDL_LIB_PATH) -lSDL2_mixer -lregex
+@@ -199,6 +200,7 @@ LIBS += $(SDL_LIB_PATH) -lSDL2_mixer -lregex
  # Code may not compile with -D_FORTIFY_SOURCE=2
  #CFLAGS += -D_FORTIFY_SOURCE=2
  #LUACFLAGS += -D_FORTIFY_SOURCE=2
