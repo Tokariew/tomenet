@@ -1,13 +1,13 @@
 ## Cross-Compling server using podman
 
-Get Dockerfile, init.sh and patches folder from this repo, put into the same directory.
+Get Containerfile, init.sh and patches folder from this repo, put into the same directory.
 Or download archive zip with [compressed branch](https://github.com/Tokariew/tomenet/archive/refs/heads/podman.zip)
 and uncompress it.
 
 Run this command to create podman image
 
 ```
-podman build --tag tomenet-server-builder -f Dockerfile --build-arg CACHEBUST=$(date +%s)
+podman build --tag tomenet-server-builder -f Containerfile --build-arg CACHEBUST=$(date +%s)
 ```
 
 Compile the server with
@@ -36,7 +36,7 @@ To apply patch add name of file at the end of command example command earlier
 like so:
 
 ```
-podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tomenet-server-builder iddcmove.patch 
+podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tomenet-server-builder iddcmove.patch
 ```
 
 You can generate your own patch file with git diff like so, if you didn't make
@@ -55,7 +55,7 @@ latest commit was more than one week ago.
 So command below will compile server only if latest commit was less than one
 week ago:
 ```
-podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tomenet-server-builder -t 
+podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tomenet-server-builder -t
 ```
 For compiling with custom patch the `-t` switch must be provided first
 
@@ -66,11 +66,11 @@ podman run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" localhost/tome
 ## Podman vs Docker difference
 
 * Docker require path for building an image. If you are inside directory with
-Dockerfile run:
+Containerfile:
 ```
 docker build --tag tomenet-server-builder --build-arg CACHEBUST=$(date +%s) .
 ```
-* When running container with docker `localhost/` before image name is not required 
+* When running container with docker `localhost/` before image name is not required
 ```
 docker run --rm -v "PATH-WHERE-TO-SAVE-BUILD-SERVER:/srv/build:z" tomenet-server-builder
 ```
