@@ -1,23 +1,19 @@
 diff --git a/src/makefile.mingw b/src/makefile.mingw
-index bbd0ce433..52f07dad4 100644
+index 942e138ef..5a212ec31 100644
 --- a/src/makefile.mingw
 +++ b/src/makefile.mingw
-@@ -186,11 +186,12 @@ LUALIBS = -lkernel32 -luser32 -lwsock32 -lgdi32 -lcomdlg32 -lwinmm
- #LIBS += -lSDL -lSDL_mixer `$(SDL_CONFIG) --libs`
+@@ -186,8 +186,8 @@ LUALIBS = -lkernel32 -luser32 -lwsock32 -lgdi32 -lcomdlg32 -lwinmm
+ #LIBS += -lSDL2_mixer `$(SDL_CONFIG) --libs`
  ##
  ## With SDL, without using 'sdl-config', entered SDL's include/lib folders manually above:
 -CFLAGS += -DSOUND_SDL $(SDL_INCLUDE_PATH)
+-LIBS += -lSDL2_mixer $(SDL_LIB_PATH)
 +#CFLAGS += -DSOUND_SDL $(SDL_INCLUDE_PATH)
- #LIBS += -lSDL -lSDL_mixer $(SDL_LIB_PATH)
- #added regexp capability for guide searching via mingw-libgnurx -> link against regex
- #LIBS += $(SDL_LIB_PATH) -lSDL_mixer -lregex
--LIBS += $(SDL_LIB_PATH) -lSDL2_mixer -lregex
-+#LIBS += $(SDL_LIB_PATH) -lSDL2_mixer -lregex
-+LIBS += -lregex
++#LIBS += -lSDL2_mixer $(SDL_LIB_PATH)
 
- # Security hardening
- # -pie seems to be broken
-@@ -199,6 +200,7 @@ LIBS += $(SDL_LIB_PATH) -lSDL2_mixer -lregex
+ #added regexp capability for guide searching via mingw-libgnurx -> link against regex
+ LIBS += -lregex
+@@ -203,6 +203,7 @@ LIBS += -lregex
  # Code may not compile with -D_FORTIFY_SOURCE=2
  #CFLAGS += -D_FORTIFY_SOURCE=2
  #LUACFLAGS += -D_FORTIFY_SOURCE=2

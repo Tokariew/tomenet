@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora-minimal:39
+FROM registry.fedoraproject.org/fedora-minimal:41
 RUN dnf5 -y install gcc make wine.i686 mingw32-{gcc,libgnurx} git p7zip-plugins --nodocs --setopt install_weak_deps=0 && dnf5 clean all -y
 COPY init.sh /init.sh
 VOLUME /srv/build
