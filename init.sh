@@ -1,5 +1,14 @@
 #!/bin/bash
 # shellcheck disable=SC2164
+#
+
+on_fail(){ \
+  curl \
+    -H prio:high \
+    -H tags:warning \
+    -d "Tomenet failed to build succesfully" \
+    https://ntfy.lab.tokariew.xyz/Error
+}
 
 cleanup(){ \
   cd /srv/build
@@ -26,7 +35,7 @@ timecheck(){ \
 }
 
 cd /srv/build
-git clone https://github.com/TomenetGame/tomenet.git tomenet
+git clone --filter=tree:0 https://github.com/TomenetGame/tomenet.git tomenet
 
 cd tomenet/src
 
@@ -47,11 +56,11 @@ patch fedora.patch || (cleanup && exit 0)
 echo "compiling"
 
 cpus="$(nproc)"
-make -s -j"$cpus" -f makefile.mingw tomenet.server.exe
+make -s -j"$cpus" -f makefile.mingw tomenet.server.exe || (on_fail && cleanup && exit 0)
 mingw-strip tomenet.server.exe
 mv tomenet.server.exe ..
 cd /srv/build/tomenet
 cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libssp-0.dll .
 cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libgnurx-0.dll .
-7z a -t7z -mx=9 ../tomenet-"$(date --iso-8601)".7z COPYING .tomenetrc lib/ tomenet.server.exe libssp-0.dll libgnurx-0.dll
+7z a -t7z -mx=9 ../tomenet-"$(date --iso-8601)".7z COPYING .tomenetrc lib/ tomenet.server.exe libssp-0.dll libgnurx-0.dll -xr!lib/xtra
 cleanup

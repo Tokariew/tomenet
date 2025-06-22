@@ -1,17 +1,16 @@
 #!/bin/sh
 # shellcheck disable=SC2164
 
-#this is a script which I use to automaticaly push builds into nextcloud and mega.nz and dropbox.com
+tomefolder=/media/btrfsv2/containers/data/tomenet
 
-mount /media/dav/ # mount nextcloud webdav
-podman run --rm -v "/media/btrfs/containers/tomenet/:/srv/build":z localhost/tomenet-server-builder:latest -t iddcmove.patch
-[ ! -e "/media/btrfs/containers/tomenet/tomenet-$(date --iso-8601).7z" ] && exit 0 # check if build was succesfull otherwise abort
-mv "/media/btrfs/containers/tomenet/tomenet-$(date --iso-8601).7z" /media/dav/tomenet/weekly-snapshots
+podman run --rm -v "$tomefolder:/srv/build":z registry.tokariew.xyz:5000/tomenet:latest -t iddcmove.patch
+[ ! -e "$tomefolder/tomenet-$(date --iso-8601).7z" ] && exit 0
+mount /media/dav/
+mv "$tomefolder/tomenet-$(date --iso-8601).7z" /media/dav/tomenet/weekly-snapshots ||  curl -d "Kompilator tomeneta się zjebał" -H "X-Tags: warning" https://ntfy.lab.tokariew.xyz/alerts
 cd /media/dav/tomenet/weekly-snapshots/
 sha256sum "tomenet-$(date --iso-8601).7z" > "tomenet-$(date --iso-8601).7z.sha256sum"
-cd ~ # hack -- escape to known location, to safely umount later
+cd ~
 echo syncing
-# using rclone to sync tomenet folder into mega and drop account
 rclone sync /media/dav/tomenet/ drop:TomeNET
 rclone sync /media/dav/tomenet/ mega:TomeNET
 umount /media/dav
