@@ -2,17 +2,6 @@ diff --git a/src/makefile.mingw b/src/makefile.mingw
 index 942e138ef..5a212ec31 100644
 --- a/src/makefile.mingw
 +++ b/src/makefile.mingw
-@@ -186,8 +186,8 @@ LUALIBS = -lkernel32 -luser32 -lwsock32 -lgdi32 -lcomdlg32 -lwinmm
- #LIBS += -lSDL2_mixer `$(SDL_CONFIG) --libs`
- ##
- ## With SDL, without using 'sdl-config', entered SDL's include/lib folders manually above:
--CFLAGS += -DSOUND_SDL $(SDL_INCLUDE_PATH)
--LIBS += -lSDL2_mixer $(SDL_LIB_PATH)
-+#CFLAGS += -DSOUND_SDL $(SDL_INCLUDE_PATH)
-+#LIBS += -lSDL2_mixer $(SDL_LIB_PATH)
-
- #added regexp capability for guide searching via mingw-libgnurx -> link against regex
- LIBS += -lregex
 @@ -203,6 +203,7 @@ LIBS += -lregex
  # Code may not compile with -D_FORTIFY_SOURCE=2
  #CFLAGS += -D_FORTIFY_SOURCE=2

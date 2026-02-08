@@ -57,7 +57,7 @@ echo "compiling"
 
 cpus="$(nproc)"
 make -s -j"$cpus" -f makefile.mingw tomenet.server.exe || (on_fail && cleanup && exit 0)
-mingw-strip tomenet.server.exe
+# mingw-strip tomenet.server.exe
 mv tomenet.server.exe ..
 cd /srv/build/tomenet
 cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libssp-0.dll .
