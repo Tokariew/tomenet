@@ -56,7 +56,7 @@ patch fedora.patch || (cleanup && exit 0)
 echo "compiling"
 
 cpus="$(nproc)"
-make -s -j"$cpus" -f makefile.mingw tomenet.server.exe || (on_fail && cleanup && exit 0)
+make -s -j"$cpus" -f makefile.mingw tomenet.server.exe || (on_fail ; cleanup && exit 0)
 # mingw-strip tomenet.server.exe
 mv tomenet.server.exe ..
 cd /srv/build/tomenet
